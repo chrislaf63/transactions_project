@@ -52,6 +52,11 @@ class UserController extends Controller
 
     public function index()
     {
+        $userId = Auth::id();
+        $loggedUser = User::find($userId);
+        if($loggedUser->role != 'admin') {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
         $users = User::all();
         return $users;
     }
@@ -65,6 +70,11 @@ class UserController extends Controller
     public function update(Request $request, $id)
     {
         $user = User::find($id);
+        $userId = Auth::id();
+        $loggedUser = User::find($userId);
+        if($loggedUser->role != 'admin' && $loggedUser->id != $user->id) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
         $user->update($request->all());
         return response()->json(['message' => 'User updated',
             'user' => $user,
@@ -74,6 +84,11 @@ class UserController extends Controller
     public function destroy($id)
     {
         $user = User::find($id);
+        $userId = Auth::id();
+        $loggedUser = User::find($userId);
+        if($loggedUser->role != 'admin' && $loggedUser->id != $user->id) {
+            return response()->json(['message' => 'Unauthorized'], 401);
+        }
         $user->delete();
         return response()->json(['message' => 'User deleted'], 200);
     }
