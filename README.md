@@ -27,4 +27,4 @@ Un contrôlleur Transaction permettant:
 
 Un utilisateur ne peux consulter et intéragir uniquement avec ses transactions.
 Le fait d'être Admin ne donne aucun accès sur les transactions des utilisateurs.
-Le fait d'être admin permet de consulter tous les utilisateurs, de les modifier (pour les rendre Admin par exemple) ou de les supprimer (non respect des conditions d'utlisation ou compte inactif depuis trop longtemps)
+Le fait d'être Admin permet de consulter tous les utilisateurs, de les modifier (pour les rendre Admin par exemple) ou de les supprimer (non respect des conditions d'utilisation ou compte inactif depuis trop longtemps)
