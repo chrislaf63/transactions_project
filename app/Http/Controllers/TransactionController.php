@@ -81,9 +81,7 @@ class TransactionController extends Controller
         }
         $user->save();
 
-        return response()->json(['transaction' => $transaction,
-            'montant' => $amount,
-            'Utilisateur' => $user,
+        return response()->json(['Status' => 'transaction reussie',
             'solde' => $user->balance],201);
     }
 
