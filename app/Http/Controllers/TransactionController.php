@@ -30,7 +30,7 @@ class TransactionController extends Controller
 
     public function index()
     {
-        $transactions = Transaction::where('user_id', Auth::id())->get();
+        $transactions = Transaction::where('user_id', Auth::id())->with('user')->get();
         return $transactions;
     }
 
@@ -165,7 +165,22 @@ class TransactionController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
         $transaction = Transaction::find($id);
+        $type = $transaction->type;
+        $oldAmount = $transaction->amount;
+        $user = $transaction->user;
         $transaction->update($request->all());
+        if($type == 'credit') {
+            $user->balance -= $oldAmount;
+        } else {
+            $user->balance += $oldAmount;
+        }
+        $newAmount = $transaction->amount;
+        if($transaction->type == 'credit') {
+            $user->balance += $newAmount;
+        } else {
+            $user->balance -= $newAmount;
+        }
+        $user->save();
         return $transaction;
     }
 
@@ -205,6 +220,13 @@ class TransactionController extends Controller
             return response()->json(['message' => 'Unauthorized'], 401);
         }
         $transaction->delete();
+        $user = $transaction->user;
+        if($transaction->type == 'credit') {
+            $user->balance -= $transaction->amount;
+        } else {
+            $user->balance += $transaction->amount;
+        }
+        $user->save();
         return response()->json(['message' => 'Transaction deleted'], 200);
     }
 }
